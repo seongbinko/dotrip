@@ -1,0 +1,12 @@
+body {
+	width: 100%;
+}
+
+.card__wrap {
+	margin: auto;
+	width: 90%;
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
