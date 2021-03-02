@@ -26,7 +26,7 @@ def save_reviews():
     title = request.form['title_give']
     content = request.form['content_give']
     file = request.files["file_give"]
-
+    user_id = db.user.find_one({"id": session['user_id']})
     extension = file.filename.split('.')[-1]
 
     today = datetime.now()
@@ -42,8 +42,8 @@ def save_reviews():
         'review_title': title,
         'review_content': content,
         'review_file': f'{filename}.{extension}',
-        'review_create_date': today.strftime('%Y.%m.%d'),
-
+        'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
+        'author': user_id['id']
     }
 
     db.reviews.insert_one(doc)
@@ -53,13 +53,13 @@ def save_reviews():
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
-#SECRET_KEY = 'SPARTA'
+# SECRET_KEY = 'SPARTA'
 
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
-#import jwt
+# import jwt
 
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-#import datetime
+# import datetime
 
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;

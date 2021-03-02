@@ -20,6 +20,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
 
+
     <link rel="preconnect" href="https://fonts.gstatic.com">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
@@ -72,7 +73,7 @@
     <div class="wrap">
         <div class="row">
             <div class="img-preview-wrap col-md-12">
-                <img src="../static/img/defaultimg.jpg" alt="img-preview" id="img-preview">
+                <img src="../static/img/defaultimg.jpg" alt="이미지를 추가해주세요" id="img-preview">
                 <!-- src 주소 jinja에 맞게 변경하기 -->
             </div>
         </div>
@@ -96,7 +97,8 @@
                 <div class="btn-wrap">
                     <button onclick="window.location.href= '/'" type="button"
                         class="btn btn-secondary btn-lg mr-3">취소</button>
-                    <button onclick="posting()" type="button" class="btn btn-primary btn-lg">등록</button>
+                    <button onclick="posting()" type="button" class="btn btn-primary btn-lg"
+                        id="posting-btn">등록</button>
                 </div>
             </div>
         </div>

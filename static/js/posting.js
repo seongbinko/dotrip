@@ -6,6 +6,7 @@ function posting() {
   let title = $('#title').val();
   let content = $('#content').val();
   let file = $('#file')[0].files[0];
+
   let form_data = new FormData();
 
   form_data.append('file_give', file);
@@ -27,10 +28,21 @@ function posting() {
 }
 
 function preview(input) {
-  if (input.files && input.files[0]) {
+  let imgfile = input.files;
+  let filetype = imgfile[0].type.split('/').pop().toLowerCase();
+
+  if (imgfile && imgfile[0]) {
     let reader = new FileReader();
     reader.onload = function (e) {
+      if ($.inArray(filetype, ['jpg', 'jpeg', 'png', 'gif']) == -1) {
+        alert('jpg, jpeg, png, gif 파일만 업로드 해주세요.');
+        $('#img-preview').attr('src', `../static/img/defaultimg.jpg`);
+        $('#posting-btn').attr('disabled', true);
+        return;
+      }
+
       $('#img-preview').attr('src', e.target.result);
+      $('#posting-btn').removeAttr('disabled');
     };
     reader.readAsDataURL(input.files[0]);
   }
