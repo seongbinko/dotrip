@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" href="/" >
+    <a class="navbar-brand" href="/">
         <span class="text-center">Dotrip</span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -42,22 +42,22 @@
     </div>
     <script>
         // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
-        function logout(){
+        function logout() {
             // $.removeCookie('mytoken');
             // alert('로그아웃!')
-    
+
             $.ajax({
-                        type: "GET",
-                        url: "/logout",
-                        success: function (response) {
-                            if (response['result'] == 'success') {
-                                window.location.href='/'
-                            } else {
-                                // 로그인이 안되면 에러메시지를 띄웁니다.
-                                alert(response['msg'])
-                            }
-                        }
-                    })
+                type: "GET",
+                url: "/logout",
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        window.location.href = '/'
+                    } else {
+                        // 로그인이 안되면 에러메시지를 띄웁니다.
+                        alert(response['msg'])
+                    }
+                }
+            })
         }
     </script>
 </nav>
