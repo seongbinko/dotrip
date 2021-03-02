@@ -11,16 +11,15 @@ db = client.dbdotrip
 # HTML 화면 보여주기
 
 
-@app.route('/upload')
-def upload():
-    return render_template('upload.html')
+@app.route('/review_save')
+def review_save():
+    return render_template('review_save.html')
 
 
 @app.route('/api/reviews', methods=['POST'])
 def save_reviews():
-    title_receive = request.form['title_give']
-    content_receive = request.form['content_give']
-
+    title = request.form['title_give']
+    content = request.form['content_give']
     file = request.files["file_give"]
 
     extension = file.filename.split('.')[-1]
@@ -35,15 +34,15 @@ def save_reviews():
     file.save(save_to)
 
     doc = {
-        'title': title_receive,
-        'content': content_receive,
-        'file': f'{filename}.{extension}',
-        'time': today.strftime('%Y.%m.%d')
+        'review_title': title,
+        'review_content': content,
+        'review_file': f'{filename}.{extension}',
+        'review_create_date': today.strftime('%Y.%m.%d')
     }
 
     db.reviews.insert_one(doc)
 
-    return jsonify({'msg': '저장 완료!'})
+    return jsonify({'msg': '등록 완료!'})
 
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.

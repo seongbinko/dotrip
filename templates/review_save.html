@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <!-- Required meta tags -->
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>스파르타코딩클럽 | 나홀로일기장</title>
+    <title>Dotrip</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
@@ -67,10 +67,13 @@
 
 <body>
 
+    {% include 'header.html' %}
+
     <div class="wrap">
         <div class="row">
             <div class="img-preview-wrap col-md-12">
-                <img src="../static/img/defaultimg.jpg" alt="fewafa" id="img-preview">
+                <img src="../static/img/defaultimg.jpg" alt="img-preview" id="img-preview">
+                <!-- src 주소 jinja에 맞게 변경하기 -->
             </div>
         </div>
 
@@ -91,18 +94,14 @@
                 </div>
 
                 <div class="btn-wrap">
-                    <button onclick="posting()" type="button" class="btn btn-primary btn-lg mr-2">등록</button>
-                    <button onclick="window.location.href= '/'" type="button" class="btn btn-danger btn-lg">취소</button>
+                    <button onclick="window.location.href= '/'" type="button"
+                        class="btn btn-secondary btn-lg mr-3">취소</button>
+                    <button onclick="posting()" type="button" class="btn btn-primary btn-lg">등록</button>
                 </div>
             </div>
         </div>
     </div>
 
-
-
-
-    <!-- <div class="card-columns" id="cards-box">
-    </div> -->
 
     <script src="../static/js/posting.js"></script>
 </body>

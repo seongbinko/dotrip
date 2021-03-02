@@ -1,8 +1,14 @@
+<<<<<<< Updated upstream
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <a class="navbar-brand" href="/" >
+=======
+<nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">
+>>>>>>> Stashed changes
         <span class="text-center">Dotrip</span>
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -30,11 +36,13 @@
                 <span class="nav-link">{{session['user_id']}}님 환영합니다.</span>
             </li>
             <li class="nav-item">
-                <a class="nav-link" style="cursor: pointer;" onclick="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i>로그아웃</a>
+                <a class="nav-link" style="cursor: pointer;" onclick="logout()"><i class="fa fa-sign-out"
+                        aria-hidden="true"></i>로그아웃</a>
             </li>
             {% endif %}
         </ul>
     </div>
+<<<<<<< Updated upstream
     <script>
         // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
         function logout(){
@@ -57,3 +65,29 @@
     </script>
 </nav>
 
+=======
+    <scipt>
+        <script>
+            // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+            function logout() {
+                // $.removeCookie('mytoken');
+                // alert('로그아웃!')
+
+                $.ajax({
+                    type: "GET",
+                    url: "/logout",
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert('로그아웃')
+                            window.location.href = '/login'
+                        } else {
+                            // 로그인이 안되면 에러메시지를 띄웁니다.
+                            alert(response['msg'])
+                        }
+                    }
+                })
+            }
+        </script>
+    </scipt>
+</nav>
+>>>>>>> Stashed changes
