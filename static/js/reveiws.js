@@ -3,7 +3,7 @@ function infinity(){
     if((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
       console.log('다 내려왔다.')
       const temp_html = `<div class="card" style="width: 350px">
-                            <img src="../static/img.jpg" class="card-img-top" alt="...">
+                            <img src="../static/img/img.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                               <h5 class="card-title">
                               <a href="...">첫번째 카드</a> //TODO: 주소 변경 필요
