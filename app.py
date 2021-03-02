@@ -16,8 +16,9 @@ def review_save():
     return render_template('review_save.html')
 
 
-@app.route('/reviews')
-def reviews():
+@app.route('/reviews', methods=['GET'])
+def show_reviews():
+
     return render_template('reviews.html')
 
 

@@ -21,6 +21,20 @@ function infinity(){
   }
 }
 
+function showReviews(){
+  $.ajax({
+    type: "GET",
+    url: "/reviews",
+    data: {},
+    success: function (response) {
+      let reviews = response['all_reviews']
+      for(let i =0; i<reviews.length; i++){
+        //TODO: 데이터 서버단에서 받아오기, 받아온 데이터 세개씩 뿌리기?
+      }
+    }
+
+}
+
 
 
 
