@@ -16,6 +16,11 @@ def review_save():
     return render_template('review_save.html')
 
 
+@app.route('/reviews')
+def reviews():
+    return render_template('reviews.html')
+
+
 @app.route('/api/reviews', methods=['POST'])
 def save_reviews():
     title = request.form['title_give']
