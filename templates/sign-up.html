@@ -28,13 +28,14 @@
                     url: "/api/sign-up",
                     data: {
                         id_give: $('#id_give').val(),
-                        pw_give: $('#pw_give').val()
+                        pw_give: $('#pw_give').val(),
+                        pwConfirm_give: $('#pwConfirm_give').val()
                     },
                     success: function (response) {
                         if (response['result'] == 'success') {
                             alert('회원가입이 완료되었습니다.')
                             
-                            $.cookie('mytoken', response['token']);
+                            //$.cookie('mytoken', response['token']);
 
                             window.location.href = '/'
                         } else {

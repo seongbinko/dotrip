@@ -78,12 +78,10 @@ def home():
     # except jwt.exceptions.DecodeError:
     #     return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
     if 'user_id' in session:
-        print(session)
-
         user_info = db.user.find_one({"id": session['user_id']})
-        return render_template('index.html', id=user_info["id"])
+        return render_template('reviews.html', id=user_info["id"])
     else:
-        return redirect(url_for("login", msg="세션 정보가 존재하지 않습니다."))
+        return redirect(url_for("login"))
 
 
 @app.route('/login')
@@ -108,6 +106,10 @@ def register():
 def api_sign_up():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
+    pwConfirm_receive = request.form['pwConfirm_give']
+
+    if pw_receive != pwConfirm_receive:
+        return jsonify({'result': 'fail', 'msg': '비밀번호가 서로 일치하지 않습니다.'})
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
@@ -135,7 +137,7 @@ def api_sign_up():
         return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
-        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+        return jsonify({'result': 'fail', 'msg': '예기치 못한 오류가 발생하였습니다.'})
 
 
 # [로그인 API]
