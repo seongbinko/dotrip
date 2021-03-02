@@ -18,7 +18,7 @@ def review_save():
 
 @app.route('/reviews', methods=['GET'])
 def show_reviews():
-
+    # reviews = list(db.)
     return render_template('reviews.html')
 
 
