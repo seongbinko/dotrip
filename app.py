@@ -90,12 +90,16 @@ def home():
 
 @app.route('/login')
 def login():
+    if 'user_id' in session:
+        return redirect("/")
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
 
 @app.route('/sign-up')
 def register():
+    if 'user_id' in session:
+        return redirect("/")
     return render_template('sign-up.html')
 
 
@@ -112,13 +116,18 @@ def api_sign_up():
     pw_receive = request.form['pw_give']
     pwConfirm_receive = request.form['pwConfirm_give']
 
+    check_duplicate_user = db.user.find_one({'id': id_receive})
+
+    if check_duplicate_user['id'] == id_receive:
+        return jsonify({'result': 'fail', 'msg': '중복된 아이디가 존재합니다.'})
+
     if pw_receive != pwConfirm_receive:
         return jsonify({'result': 'fail', 'msg': '비밀번호가 서로 일치하지 않습니다.'})
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     # 리턴 값은 존재하지 않음
-    db.user.insert_one({'id': id_receive, 'pw': pw_hash, })
+    db.user.insert_one({'id': id_receive, 'pw': pw_hash})
 
     # 회원 가입 후 로그인 처리 까지 진행
     result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
