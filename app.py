@@ -37,7 +37,8 @@ def save_reviews():
         'review_title': title,
         'review_content': content,
         'review_file': f'{filename}.{extension}',
-        'review_create_date': today.strftime('%Y.%m.%d')
+        'review_create_date': today.strftime('%Y.%m.%d'),
+
     }
 
     db.reviews.insert_one(doc)
