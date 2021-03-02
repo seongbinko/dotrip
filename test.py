@@ -8,9 +8,6 @@ client = MongoClient('localhost', 27017)
 db = client.dbdotrip
 
 
-# HTML 화면 보여주기
-
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -19,6 +16,12 @@ def home():
 @app.route('/upload')
 def upload():
     return render_template('upload.html')
+
+
+@app.route('/api/reviews', methods=['GET'])
+def show_reviews():
+    reviews = list(db.reviews.find({}, {'_id': False}))
+    return jsonify({'all_reviews': reviews})
 
 
 @app.route('/api/reviews', methods=['POST'])
