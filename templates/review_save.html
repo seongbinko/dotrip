@@ -6,13 +6,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
     <title>Dotrip</title>
 
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
@@ -24,29 +23,30 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/review_save.css') }}">
 
-
-
 </head>
 
 <body>
-
+    <!-- nav-bar -->
     {% include 'header.html' %}
 
-    <div class="">
-        <div class="text-center">
-            <div class="">
+    <div class="wrap">
+        <h1 class="text-center">리뷰 작성하기</h1>
+
+        <!-- img-preview -->
+        <div class="img-container">
+            <div class="img-wrap">
                 <img src="../static/img/defaultimg.jpg" alt="이미지를 추가해주세요" id="img-preview">
-                <!-- src 주소 jinja에 맞게 변경하기 -->
             </div>
         </div>
 
+        <!-- posting-box -->
         <div class="posting-box">
-            <div class="custom-file form-group">
+            <div class="custom-file form-group file-upload">
                 <input type="file" class="custom-file-input" id="file" onchange="preview(this)">
                 <label class="custom-file-label" for="file">사진 추가하기</label>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-2">
                 <label>제목</label>
                 <input type="email" class="form-control" id="title" placeholder="사진 제목을 입력하세요.">
             </div>
@@ -56,16 +56,16 @@
                 <textarea class="form-control" id="content" rows="5" placeholder="내용을 입력하세요."></textarea>
             </div>
 
-            <div class="btn-group">
+            <!-- btn-group -->
+            <div class="btn-wrap">
                 <button onclick="window.location.href= '/'" type="button"
                     class="btn btn-secondary btn-lg mr-3">취소</button>
                 <button onclick="posting()" type="button" class="btn btn-primary btn-lg" id="posting-btn">등록</button>
             </div>
+
         </div>
-
     </div>
-
-
+    <!-- javaScript -->
     <script src="../static/js/posting.js"></script>
 </body>
 
