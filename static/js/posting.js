@@ -7,6 +7,16 @@ function posting() {
   let content = $('#content').val();
   let file = $('#file')[0].files[0];
 
+  if (title === '') {
+    alert('제목을 추가해주세요.');
+    $('#title').focus();
+    return;
+  } else if (content === '') {
+    alert('내용을 추가해주세요.');
+    $('#content').focus();
+    return;
+  }
+
   let form_data = new FormData();
 
   form_data.append('file_give', file);
@@ -22,7 +32,7 @@ function posting() {
     processData: false,
     success: function (response) {
       alert(response['msg']);
-      window.location.reload();
+      window.location.href = '/reviews';
     },
   });
 }
