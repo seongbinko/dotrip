@@ -30,6 +30,13 @@ def show_reviews():
     return render_template('reviews.html', review_data=review)
 
 
+@app.route('/review_update/<_id>/<author>')
+def review_update(_id, author):
+    datas = list(db.reviews.find({}))
+    _id = datas[i]['_id']
+    return render_template('review_update.html', review_data=datas)
+
+
 @app.route('/api/reviews', methods=['POST'])
 def save_reviews():
     title = request.form['title_give']
