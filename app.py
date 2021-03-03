@@ -59,19 +59,19 @@ def save_reviews():
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
-# SECRET_KEY = 'SPARTA'
+SECRET_KEY = 'SPARTA'
 
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
-# import jwt
+import jwt
 
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-# import datetime
+import datetime
 
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 
 # session 관련 정보
-app.secret_key = b'aaa!111/'
+#app.secret_key = b'aaa!111/'
 
 
 #################################
@@ -79,20 +79,22 @@ app.secret_key = b'aaa!111/'
 #################################
 @app.route('/')
 def home():
-    # token_receive = request.cookies.get('mytoken')
-    # try:
-    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    #     user_info = db.user.find_one({"id": payload['id']})
-    #     return render_template('index.html', nickname=user_info["nick"])
-    # except jwt.ExpiredSignatureError:
-    #     return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    # except jwt.exceptions.DecodeError:
-    #     return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
-    if 'user_id' in session:
-        user_info = db.user.find_one({"id": session['user_id']})
-        return render_template('reviews.html', id=user_info["id"])
-    else:
-        return redirect(url_for("login"))
+    
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        #user_info = db.user.find_one({"id": payload['id']})
+        return render_template('reviews.html', id=payload['id'])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+    #if 'user_id' in session:
+        #user_info = db.user.find_one({"id": session['user_id']})
+        #return render_template('reviews.html', id=user_info["id"])
+    #else:
+        #return redirect(url_for("login"))
 
 
 @app.route('/login')
@@ -119,6 +121,13 @@ def api_sign_up():
     pw_receive = request.form['pw_give']
     pwConfirm_receive = request.form['pwConfirm_give']
 
+    check_duplicate_user = db.user.find_one({'id': id_receive})
+    
+
+    if check_duplicate_user is not None:
+        if check_duplicate_user['id'] == id_receive:
+            return jsonify({'result': 'fail', 'msg': '중복된 아이디가 존재합니다.'})
+
     if pw_receive != pwConfirm_receive:
         return jsonify({'result': 'fail', 'msg': '비밀번호가 서로 일치하지 않습니다.'})
 
@@ -135,17 +144,17 @@ def api_sign_up():
         # 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있습니다.
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
-        # payload = {
-        #     'id': id_receive,
-        #     'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds= 10)
-        # }
-        # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-        # #.decode('utf-8')
+         payload = {
+             'id': id_receive,
+             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+         }
+         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+         #.decode('utf-8') pwjwt 3이상 버전부터는 필요하지 않음 default가 utf-8
 
         # # token을 줍니다.
-        # return jsonify({'result': 'success', 'token': token})
-        session['user_id'] = id_receive
-        return jsonify({'result': 'success'})
+         return jsonify({'result': 'success', 'token': token})
+        #session['user_id'] = id_receive
+        #return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '예기치 못한 오류가 발생하였습니다.'})
@@ -170,29 +179,28 @@ def api_login():
         # 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있습니다.
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
-        # payload = {
-        #     'id': id_receive,
-        #     'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=100)
-        # }
-        # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')#.decode('utf-8')
-        # token을 줍니다.
-        # return jsonify({'result': 'success', 'token': token})
-        session['user_id'] = id_receive
-        return jsonify({'result': 'success'})
+         payload = {
+             'id': id_receive,
+             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+         }
+         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')#.decode('utf-8')
+        
+         return jsonify({'result': 'success', 'token': token})
+        #session['user_id'] = id_receive
+        #return jsonify({'result': 'success'})
 
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
-@app.route('/logout', methods=['GET'])
-def logout():
-    try:
-        session.pop('user_id', None)
-        return jsonify({'result': 'success'})
-    except session.ExpiredSignatureError:
-        return jsonify({'result': 'fail', 'msg': '정상적인 요청이 아닙니다'})
-
+# @app.route('/logout', methods=['GET'])
+# def logout():
+#     try:
+#         session.pop('user_id', None)
+#         return jsonify({'result': 'success'})
+#     except session.ExpiredSignatureError:
+#         return jsonify({'result': 'fail', 'msg': '정상적인 요청이 아닙니다'})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

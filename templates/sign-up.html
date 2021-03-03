@@ -34,11 +34,10 @@
                         },
                         success: function (response) {
                             if (response['result'] == 'success') {
-                                alert('회원가입이 완료되었습니다.')
-                                
-                                //$.cookie('mytoken', response['token']);
-
-                                window.location.href = '/'
+                                alert('회원가입이 완료되었습니다.') 
+                                $.cookie('mytoken', response['token']);
+                                // const token = JSON.parse(atob(response['token'].split('.')[1]));
+                                window.location.href = "/";
                             } else {
                                 alert(response['msg'])
                             }
@@ -80,22 +79,6 @@
                     $("#pwConfirm_give").focus()
                     return false;
                 }
-                // $.ajax({
-                //     type: "POST",
-                //     url: "/sign_up/check_dup",
-                //     data: {
-                //         username_give: username
-                //     },
-                //     success: function (response) {
-
-                //         if (response["exists"]) {
-                //             $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("text-muted").addClass("text-warning")
-                //             $("#input-username").focus()
-                //         } else {
-                //             $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("text-success")
-                //         }
-                //     }
-                // });
                 return true;
             }
             function is_nickname(asValue) {
