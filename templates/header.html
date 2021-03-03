@@ -1,5 +1,4 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <input id="toeknMessage" type="hidden" value="{{ msg }}">
     <a class="navbar-brand" href="/">
         <span class="text-center">Dotrip</span>
     </a>
@@ -51,20 +50,7 @@
         })
         function logout() {
             $.removeCookie('mytoken');
-            window.location.href = '/'
-
-            // $.ajax({
-            //     type: "GET",
-            //     url: "/logout",
-            //     success: function (response) {
-            //         if (response['result'] == 'success') {
-            //             window.location.href = '/'
-            //         } else {
-            //             // 로그인이 안되면 에러메시지를 띄웁니다.
-            //             alert(response['msg'])
-            //         }
-            //     }
-            // })
+            window.location.href = '/';
         }
     </script>
 </nav>
