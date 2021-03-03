@@ -7,6 +7,7 @@ app = Flask(__name__)
 client = MongoClient('localhost', 27017)
 # client = MongoClient('mongodb://test:test@localhost', 27017)
 db = client.dbdotrip
+#db = client.dotrip
 
 # HTML 화면 보여주기
 
