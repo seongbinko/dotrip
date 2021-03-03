@@ -7,6 +7,7 @@ app = Flask(__name__)
 client = MongoClient('localhost', 27017)
 # client = MongoClient('mongodb://test:test@localhost', 27017)
 db = client.dbdotrip
+#db = client.dotrip
 
 # HTML 화면 보여주기
 
@@ -119,9 +120,9 @@ def api_sign_up():
     pwConfirm_receive = request.form['pwConfirm_give']
 
     check_duplicate_user = db.user.find_one({'id': id_receive})
-
-    if check_duplicate_user['id'] == id_receive:
-        return jsonify({'result': 'fail', 'msg': '중복된 아이디가 존재합니다.'})
+    if check_duplicate_user is not None:
+        if check_duplicate_user['id'] == id_receive:
+            return jsonify({'result': 'fail', 'msg': '중복된 아이디가 존재합니다.'})
 
     if pw_receive != pwConfirm_receive:
         return jsonify({'result': 'fail', 'msg': '비밀번호가 서로 일치하지 않습니다.'})
