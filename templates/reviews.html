@@ -29,11 +29,12 @@
       {%set date = i.review_create_date%}
       {%set img_file = i.review_file%}
       {%set content = i.review_content%}
+      {%set detail = i._id%}
       <div class="card" style="width: 350px">
         <img src="../static/img/{{img_file}}" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">
-            <a href="...">{{title}}</a>
+            <a href="reviews/{{detail}}">{{title}}</a>
           </h5>
           <p class="card-text">{{content}}</p>
         </div>

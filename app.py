@@ -1,3 +1,6 @@
+import base64
+import datetime
+import jwt
 import hashlib
 from pymongo import MongoClient
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
@@ -25,8 +28,16 @@ def review_save():
 
 @app.route('/reviews', methods=['GET'])
 def show_reviews():
-    review = list(db.reviews.find({}, {'_id': False}))
+    review = list(db.reviews.find({}))
     return render_template('reviews.html', review_data=review)
+
+# 게시글 페이지로 이동하기
+
+
+# @app.rout('/reviews/_id', methods=['GET'])
+# def detail(_id):
+#    review_id =
+#    return render_template('')
 
 
 @app.route('/review_update/<_id>/<author>')
@@ -71,12 +82,9 @@ def save_reviews():
 SECRET_KEY = 'SPARTA'
 
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
-import jwt
 
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-import datetime
 
-import base64
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 
@@ -89,7 +97,7 @@ import base64
 #################################
 @app.route('/')
 def home():
-    
+
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -99,11 +107,11 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-    #if 'user_id' in session:
+    # if 'user_id' in session:
         #user_info = db.user.find_one({"id": session['user_id']})
-        #return render_template('reviews.html', id=user_info["id"])
-    #else:
-        #return redirect(url_for("login"))
+        # return render_template('reviews.html', id=user_info["id"])
+    # else:
+        # return redirect(url_for("login"))
 
 
 @app.route('/login')
@@ -131,7 +139,6 @@ def api_sign_up():
     pwConfirm_receive = request.form['pwConfirm_give']
 
     check_duplicate_user = db.user.find_one({'id': id_receive})
-    
 
     if check_duplicate_user is not None:
         if check_duplicate_user['id'] == id_receive:
@@ -153,17 +160,17 @@ def api_sign_up():
         # 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있습니다.
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
-         payload = {
-             'id': id_receive,
-             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
-         }
-         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-         #.decode('utf-8') pwjwt 3이상 버전부터는 필요하지 않음 default가 utf-8
+        payload = {
+            'id': id_receive,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        # .decode('utf-8') pwjwt 3이상 버전부터는 필요하지 않음 default가 utf-8
 
         # # token을 줍니다.
-         return jsonify({'result': 'success', 'token': token})
+        return jsonify({'result': 'success', 'token': token})
         #session['user_id'] = id_receive
-        #return jsonify({'result': 'success'})
+        # return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '예기치 못한 오류가 발생하였습니다.'})
@@ -188,15 +195,16 @@ def api_login():
         # 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있습니다.
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
-         payload = {
-             'id': id_receive,
-             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
-         }
-         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')#.decode('utf-8')
-        
-         return jsonify({'result': 'success', 'token': token})
+        payload = {
+            'id': id_receive,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+        }
+        token = jwt.encode(payload, SECRET_KEY,
+                           algorithm='HS256')  # .decode('utf-8')
+
+        return jsonify({'result': 'success', 'token': token})
         #session['user_id'] = id_receive
-        #return jsonify({'result': 'success'})
+        # return jsonify({'result': 'success'})
 
     # 찾지 못하면
     else:
