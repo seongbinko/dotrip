@@ -21,6 +21,8 @@ def review_save():
     else:
         return redirect(url_for("login"))
 
+# 메인화면에 list 띄워주기
+
 
 @app.route('/reviews', methods=['GET'])
 def show_reviews():
