@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+# from datetime import datetime
+from bson.objectid import ObjectId
+=======
+>>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
 import base64
 import datetime
 import jwt
@@ -5,6 +10,7 @@ import hashlib
 from pymongo import MongoClient
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 app = Flask(__name__)
+
 
 client = MongoClient('localhost', 27017)
 # client = MongoClient('mongodb://test:test@localhost', 27017)
@@ -17,11 +23,17 @@ db = client.dbdotrip
 @app.route('/review_save')
 def review_save():
 
-    if 'user_id' in session:
-        user_info = db.user.find_one({"id": session['user_id']})
-        return render_template('review_save.html', id=user_info["id"])
-    else:
-        return redirect(url_for("login"))
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        #user_info = db.user.find_one({"id": payload['id']})
+        return render_template('review_save.html', id=payload['id'])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+    # return render_template('review_save.html')
+
 
 # 메인화면에 list 띄워주기
 
@@ -40,12 +52,20 @@ def detail_reviews(review_id):
     reviewId = list(db.reviews.find({'_id': review_id}))
     return render_template('detail.html', reviewId=reviewId)
 
+<<<<<<< HEAD
+@app.route('/review_update/<id_data>')
+def review_update(id_data):
+    author_info = db.reviews.find_one({"_id": ObjectId(id_data)})
+
+    return render_template('review_update.html', data=author_info)
+=======
 
 @ app.route('/review_update/<_id>/<author>')
 def review_update(_id, author):
     datas = list(db.reviews.find({}))
     _id = datas[i]['_id']
     return render_template('review_update.html', review_data=datas)
+>>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
 
 
 @ app.route('/api/reviews', methods=['POST'])
@@ -53,7 +73,12 @@ def save_reviews():
     title = request.form['title_give']
     content = request.form['content_give']
     file = request.files["file_give"]
-    user_id = db.user.find_one({"id": session['user_id']})
+    # user_id = db.user.find_one({"id": session['user_id']})
+
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.user.find_one({"id": payload['id']})
+
     extension = file.filename.split('.')[-1]
 
     today = datetime.now()
@@ -70,7 +95,9 @@ def save_reviews():
         'review_content': content,
         'review_file': f'{filename}.{extension}',
         'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
-        'author': user_id['id']
+        'author': user_info['id']
+
+        # 'author': user_id['id']
     }
 
     db.reviews.insert_one(doc)
@@ -109,7 +136,11 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
     # if 'user_id' in session:
+<<<<<<< HEAD
+        #user_info = db.user.find_one({"id": session['user_id']})
+=======
         # user_info = db.user.find_one({"id": session['user_id']})
+>>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return render_template('reviews.html', id=user_info["id"])
     # else:
         # return redirect(url_for("login"))
@@ -170,7 +201,11 @@ def api_sign_up():
 
         # # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
+<<<<<<< HEAD
+        #session['user_id'] = id_receive
+=======
         # session['user_id'] = id_receive
+>>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
@@ -204,7 +239,11 @@ def api_login():
                            algorithm='HS256')  # .decode('utf-8')
 
         return jsonify({'result': 'success', 'token': token})
+<<<<<<< HEAD
+        #session['user_id'] = id_receive
+=======
         # session['user_id'] = id_receive
+>>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return jsonify({'result': 'success'})
 
     # 찾지 못하면
