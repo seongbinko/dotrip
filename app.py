@@ -18,8 +18,8 @@ def review_save():
 
 @app.route('/reviews', methods=['GET'])
 def show_reviews():
-    # reviews = list(db.)
-    return render_template('reviews.html')
+    review = list(db.reviews.find({}, {'_id': False}))
+    return render_template('reviews.html', review_data=review)
 
 
 @app.route('/api/reviews', methods=['POST'])
@@ -121,7 +121,7 @@ def api_sign_up():
     check_duplicate_user = db.user.find_one({'id': id_receive})
 
     if check_duplicate_user['id'] == id_receive:
-         return jsonify({'result': 'fail', 'msg': '중복된 아이디가 존재합니다.'})
+        return jsonify({'result': 'fail', 'msg': '중복된 아이디가 존재합니다.'})
 
     if pw_receive != pwConfirm_receive:
         return jsonify({'result': 'fail', 'msg': '비밀번호가 서로 일치하지 않습니다.'})
