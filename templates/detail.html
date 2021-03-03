@@ -12,31 +12,28 @@
     <!-- img-view -->
     <div class="img-container">
         <div class="img-wrap">
-            <img src="..." alt="이미지를 추가해주세요" id="img-preview">
+            <img src="..." alt="업로드 한 이미지" id="img-preview">
         </div>
     </div>
 
     <!-- posting-box -->
     <div class="posting-box">
         <div class="custom-file form-group file-upload">
-            <input type="file" class="custom-file-input" id="file" onchange="preview(this)">
-            <label class="custom-file-label" for="file">사진 추가하기</label>
         </div>
 
         <div class="form-group mt-2">
-            <label>제목</label>
-            <input type="email" class="form-control" id="title" placeholder="사진 제목을 입력하세요.">
+            <div class="review_title">임시방편 제목이다.</div>
         </div>
 
         <div class="form-group">
             <label>내용</label>
-            <textarea class="form-control" id="content" rows="5" placeholder="내용을 입력하세요."></textarea>
+            <div class="content">무슨말이든~~하라고~~</div>
         </div>
 
         <!-- btn-group -->
         <div class="btn-wrap">
             <button onclick="window.location.href= '/'" type="button"
-                class="btn btn-secondary btn-lg mr-3">취소</button>
+                class="btn btn-secondary btn-lg mr-3">목록으로</button>
             <button onclick="posting()" type="button" class="btn btn-primary btn-lg" id="posting-btn">등록</button>
         </div>
 
