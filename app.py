@@ -21,10 +21,13 @@ def review_save():
     else:
         return redirect(url_for("login"))
 
+# 메인화면에 list 띄워주기
 
-@app.route('/reviews')
-def reviews():
-    return render_template('reviews.html')
+
+@app.route('/reviews', methods=['GET'])
+def show_reviews():
+    review = list(db.reviews.find({}, {'_id': False}))
+    return render_template('reviews.html', review_data=review)
 
 
 @app.route('/api/reviews', methods=['POST'])

@@ -21,90 +21,29 @@
   <body>
     <!--navBar-->
     {% include 'header.html' %}
+    
     <div class="card__wrap">
-      <!--card list 들어가는 곳-->
+    {% for i in review_data %}
+      {%set author = i.author%}
+      {%set title = i.review_title%}
+      {%set date = i.review_create_date%}
+      {%set img = i.review_file%}
+      {%set content = i.rivew_content%}
       <div class="card" style="width: 350px">
-        <img src="../static/img/camp.jpeg" class="card-img-top" alt="...">
+        <img src="{{ url_for('static', filename='img/camp.jpeg') }}" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">
-            <a href="...">첫번째 카드</a>
+            <a href="...">{{title}}</a>
           </h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <p class="card-text">{{content}}</p>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">작성일</li>
-          <li class="list-group-item">작성자 아이디</li>
+          <li class="list-group-item">{{date}}</li>
+          <li class="list-group-item">{{author}}</li>
         </ul>
       </div>
-      <div class="card" style="width: 350px">
-        <img src="../static/img/camp.jpeg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="...">첫번째 카드</a>
-          </h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">작성일</li>
-          <li class="list-group-item">작성자 아이디</li>
-        </ul>
-      </div>
-      <div class="card" style="width: 350px">
-        <img src="../static/img/camp.jpeg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="...">두번째 카드</a>
-          </h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">작성일</li>
-          <li class="list-group-item">작성자 아이디</li>
-        </ul>
-      </div>
-      <div class="card" style="width: 350px">
-        <img src="../static/img/camp.jpeg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="...">세번째 카드</a>
-          </h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">작성일</li>
-          <li class="list-group-item">작성자 아이디</li>
-        </ul>
-      </div>
-      <div class="card" style="width: 350px">
-        <img src="../static/img/camp.jpeg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="...">첫번째 카드</a>
-          </h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">작성일</li>
-          <li class="list-group-item">작성자 아이디</li>
-        </ul>
-      </div>
-      <div class="card" style="width: 350px">
-        <img src="../static/img/camp.jpeg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="...">첫번째 카드</a>
-          </h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">작성일</li>
-          <li class="list-group-item">작성자 아이디</li>
-        </ul>
-      </div>
-
-    
-    
-    </div>
+    {% endfor %}
+    </div> 
 
 
     
