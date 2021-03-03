@@ -9,7 +9,7 @@ app = Flask(__name__)
 client = MongoClient('localhost', 27017)
 # client = MongoClient('mongodb://test:test@localhost', 27017)
 db = client.dbdotrip
-#db = client.dotrip
+# db = client.dotrip
 
 # HTML 화면 보여주기
 
@@ -34,20 +34,20 @@ def show_reviews():
 # 게시글 페이지로 이동하기
 
 
-# @app.rout('/reviews/_id', methods=['GET'])
-# def detail(_id):
-#    review_id =
-#    return render_template('')
+@app.route('/reviews/<review_id>', methods=['GET'])
+def detail_reviews(review_id):
+    review = list(db.reviews.find({'_id': review_id}))
+    return render_template('detail.html', review=review)
 
 
-@app.route('/review_update/<_id>/<author>')
+@ app.route('/review_update/<_id>/<author>')
 def review_update(_id, author):
     datas = list(db.reviews.find({}))
     _id = datas[i]['_id']
     return render_template('review_update.html', review_data=datas)
 
 
-@app.route('/api/reviews', methods=['POST'])
+@ app.route('/api/reviews', methods=['POST'])
 def save_reviews():
     title = request.form['title_give']
     content = request.form['content_give']
@@ -89,13 +89,13 @@ SECRET_KEY = 'SPARTA'
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 
 # session 관련 정보
-#app.secret_key = b'aaa!111/'
+# app.secret_key = b'aaa!111/'
 
 
 #################################
 ##  HTML을 주는 부분             ##
 #################################
-@app.route('/')
+@ app.route('/')
 def home():
 
     token_receive = request.cookies.get('mytoken')
@@ -108,19 +108,19 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
     # if 'user_id' in session:
-        #user_info = db.user.find_one({"id": session['user_id']})
+        # user_info = db.user.find_one({"id": session['user_id']})
         # return render_template('reviews.html', id=user_info["id"])
     # else:
         # return redirect(url_for("login"))
 
 
-@app.route('/login')
+@ app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
 
-@app.route('/sign-up')
+@ app.route('/sign-up')
 def register():
     return render_template('sign-up.html')
 
@@ -132,7 +132,7 @@ def register():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-@app.route('/api/sign-up', methods=['POST'])
+@ app.route('/api/sign-up', methods=['POST'])
 def api_sign_up():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
@@ -169,7 +169,7 @@ def api_sign_up():
 
         # # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
-        #session['user_id'] = id_receive
+        # session['user_id'] = id_receive
         # return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
@@ -178,7 +178,7 @@ def api_sign_up():
 
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
-@app.route('/api/login', methods=['POST'])
+@ app.route('/api/login', methods=['POST'])
 def api_login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
@@ -203,7 +203,7 @@ def api_login():
                            algorithm='HS256')  # .decode('utf-8')
 
         return jsonify({'result': 'success', 'token': token})
-        #session['user_id'] = id_receive
+        # session['user_id'] = id_receive
         # return jsonify({'result': 'success'})
 
     # 찾지 못하면
