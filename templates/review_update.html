@@ -28,16 +28,53 @@
 <body>
     <!-- nav-bar -->
     {% include 'header.html' %}
-    {{data}}
-    {{test}}
 
-    <!-- {{content}}
-    {{file}}
-    {{date}}
-    {{author}}
-    {{_id}} -->
+    <div class="wrap">
+        <h1 class="text-center">리뷰 수정하기</h1>
 
+        <!-- img-preview -->
+        <div class="img-container">
+            <div class="img-wrap">
+                <img src="{{ url_for('static', filename='img/' + data['review_file']) }}" alt="이미지" id="img-preview">
+            </div>
+        </div>
 
+        <!-- posting-box -->
+        <div class="posting-box">
+            <div class="custom-file form-group file-upload">
+                <input type="file" class="custom-file-input" id="file" onchange="preview(this)">
+                <label class="custom-file-label" for="file">{{data['review_file']}}</label>
+            </div>
+
+            <div class="form-group mt-2">
+                <label>제목</label>
+                <input type="email" class="form-control" id="title" placeholder="사진 제목을 입력하세요."
+                    value="{{data['review_title']}}">
+            </div>
+
+            <div class="form-group">
+                <label>내용</label>
+                <textarea class="form-control" id="content" rows="5"
+                    placeholder="내용을 입력하세요.">{{data['review_content']}}</textarea>
+            </div>
+
+            <!-- btn-group -->
+
+            <!-- 취소시 상세페이지로 이동 -->
+            <div class="btn-wrap">
+                <button onclick="window.location.href= '/'" type="button"
+                    class="btn btn-secondary btn-lg mr-3">취소</button>
+                <!-- 삭제시 디비까지 삭제 -->
+                <button onclick="" type="button" class="btn btn-secondary btn-lg mr-3">삭제</button>
+                <!-- 수정은 디비에 덮어씌움 -->
+                <button onclick="posting()" type="button" class="btn btn-primary btn-lg" id="posting-btn">수정</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- <script src="../static/js/posting.js"></script> -->
+    <script src="{{ url_for('static', filename='js/posting.js') }}"></script>
 </body>
 
 </html>

@@ -36,7 +36,6 @@
                             if (response['result'] == 'success') {
                                 alert('회원가입이 완료되었습니다.') 
                                 $.cookie('mytoken', response['token']);
-                                // const token = JSON.parse(atob(response['token'].split('.')[1]));
                                 window.location.href = "/";
                             } else {
                                 alert(response['msg'])

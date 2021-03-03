@@ -1,10 +1,13 @@
 # from datetime import datetime
+from bson.objectid import ObjectId
+import base64
 import datetime
 import jwt
 import hashlib
 from pymongo import MongoClient
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 app = Flask(__name__)
+
 
 client = MongoClient('localhost', 27017)
 # client = MongoClient('mongodb://test:test@localhost', 27017)
@@ -40,12 +43,9 @@ def show_reviews():
 
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
-    token_receive = request.cookies.get('mytoken')
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    author_info = db.reviews.find_one({"author": payload['id']})
-    author_test = db.reviews.find_one({"_id": id_data})
+    author_info = db.reviews.find_one({"_id": ObjectId(id_data)})
 
-    return render_template('review_update.html', data=author_info, test=author_test)
+    return render_template('review_update.html', data=author_info)
 
 
 @app.route('/api/reviews', methods=['POST'])
@@ -109,8 +109,7 @@ def home():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        #user_info = db.user.find_one({"id": payload['id']})
-        return render_template('reviews.html', id=payload['id'])
+        return redirect("reviews")
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:

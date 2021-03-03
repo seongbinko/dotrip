@@ -27,10 +27,10 @@
       {%set author = i.author%}
       {%set title = i.review_title%}
       {%set date = i.review_create_date%}
-      {%set img = i.review_file%}
+      {%set img_file = i.review_file%}
       {%set content = i.review_content%}
       <div class="card" style="width: 350px">
-        <img src="{{ url_for('static', filename='img/camp.jpeg') }}" class="card-img-top" alt="...">
+        <img src="../static/img/{{img_file}}" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">
             <a href="...">{{title}}</a>

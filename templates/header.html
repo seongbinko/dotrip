@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <!-- 인증시 -->
         <ul class="navbar-nav mr-auto">
-            {% if id is not defined %}
+            {% if request.cookies.get('mytoken') is none %}
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link btn btn-outline-primary" href="/review_save">
@@ -21,7 +21,7 @@
         </ul>
         <ul class="navbar-nav justify-content-end">
             <!-- 미인증시 -->
-            {% if id is not defined %}
+            {% if request.cookies.get('mytoken') is none %}
             <li class="nav-item">
                 <a class="nav-link" href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i>로그인</a>
             </li>
@@ -31,7 +31,7 @@
             <!--인증시-->
             {% else %}
             <li class="nav-item">
-                <span class="nav-link">{{ id }}님 환영합니다.</span>
+                <span id="user_id" class="nav-link"></span>
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="cursor: pointer;" onclick="logout()"><i class="fa fa-sign-out"
@@ -42,7 +42,13 @@
     </div>
     <script>
         // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
-        
+        $(document).ready(function() {
+            let token = $.cookie('mytoken');
+            if(token !== undefined) {
+                token = JSON.parse(atob(token.split('.')[1]));
+                $("#user_id").text(token.id + '님 환영합니다')
+            }
+        })
         function logout() {
             $.removeCookie('mytoken');
             window.location.href = '/'
