@@ -1,5 +1,7 @@
+# from datetime import datetime
+import datetime
+import jwt
 import hashlib
-from datetime import datetime
 from pymongo import MongoClient
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 app = Flask(__name__)
@@ -15,11 +17,17 @@ db = client.dbdotrip
 @app.route('/review_save')
 def review_save():
 
-    if 'user_id' in session:
-        user_info = db.user.find_one({"id": session['user_id']})
-        return render_template('review_save.html', id=user_info["id"])
-    else:
-        return redirect(url_for("login"))
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        #user_info = db.user.find_one({"id": payload['id']})
+        return render_template('review_save.html', id=payload['id'])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+    # return render_template('review_save.html')
+
 
 # 메인화면에 list 띄워주기
 
@@ -30,11 +38,14 @@ def show_reviews():
     return render_template('reviews.html', review_data=review)
 
 
-@app.route('/review_update/<_id>/<author>')
-def review_update(_id, author):
-    datas = list(db.reviews.find({}))
-    _id = datas[i]['_id']
-    return render_template('review_update.html', review_data=datas)
+@app.route('/review_update/<id_data>')
+def review_update(id_data):
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    author_info = db.reviews.find_one({"author": payload['id']})
+    author_test = db.reviews.find_one({"_id": id_data})
+
+    return render_template('review_update.html', data=author_info, test=author_test)
 
 
 @app.route('/api/reviews', methods=['POST'])
@@ -42,7 +53,12 @@ def save_reviews():
     title = request.form['title_give']
     content = request.form['content_give']
     file = request.files["file_give"]
-    user_id = db.user.find_one({"id": session['user_id']})
+    # user_id = db.user.find_one({"id": session['user_id']})
+
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.user.find_one({"id": payload['id']})
+
     extension = file.filename.split('.')[-1]
 
     today = datetime.now()
@@ -59,7 +75,9 @@ def save_reviews():
         'review_content': content,
         'review_file': f'{filename}.{extension}',
         'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
-        'author': user_id['id']
+        'author': user_info['id']
+
+        # 'author': user_id['id']
     }
 
     db.reviews.insert_one(doc)
@@ -72,10 +90,8 @@ def save_reviews():
 SECRET_KEY = 'SPARTA'
 
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
-import jwt
 
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-import datetime
 
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
@@ -89,7 +105,7 @@ import datetime
 #################################
 @app.route('/')
 def home():
-    
+
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -100,11 +116,11 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-    #if 'user_id' in session:
+    # if 'user_id' in session:
         #user_info = db.user.find_one({"id": session['user_id']})
-        #return render_template('reviews.html', id=user_info["id"])
-    #else:
-        #return redirect(url_for("login"))
+        # return render_template('reviews.html', id=user_info["id"])
+    # else:
+        # return redirect(url_for("login"))
 
 
 @app.route('/login')
@@ -132,7 +148,6 @@ def api_sign_up():
     pwConfirm_receive = request.form['pwConfirm_give']
 
     check_duplicate_user = db.user.find_one({'id': id_receive})
-    
 
     if check_duplicate_user is not None:
         if check_duplicate_user['id'] == id_receive:
@@ -154,17 +169,17 @@ def api_sign_up():
         # 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있습니다.
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
-         payload = {
-             'id': id_receive,
-             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
-         }
-         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-         #.decode('utf-8') pwjwt 3이상 버전부터는 필요하지 않음 default가 utf-8
+        payload = {
+            'id': id_receive,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        # .decode('utf-8') pwjwt 3이상 버전부터는 필요하지 않음 default가 utf-8
 
         # # token을 줍니다.
-         return jsonify({'result': 'success', 'token': token})
+        return jsonify({'result': 'success', 'token': token})
         #session['user_id'] = id_receive
-        #return jsonify({'result': 'success'})
+        # return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '예기치 못한 오류가 발생하였습니다.'})
@@ -189,15 +204,16 @@ def api_login():
         # 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있습니다.
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
-         payload = {
-             'id': id_receive,
-             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
-         }
-         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')#.decode('utf-8')
-        
-         return jsonify({'result': 'success', 'token': token})
+        payload = {
+            'id': id_receive,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+        }
+        token = jwt.encode(payload, SECRET_KEY,
+                           algorithm='HS256')  # .decode('utf-8')
+
+        return jsonify({'result': 'success', 'token': token})
         #session['user_id'] = id_receive
-        #return jsonify({'result': 'success'})
+        # return jsonify({'result': 'success'})
 
     # 찾지 못하면
     else:
