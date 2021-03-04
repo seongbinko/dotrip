@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
   {% include 'fragment.html' %}
-  <link rel="stylesheet" type="text/css" href="../static/css/review_detail.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/review_save.css">
 </head>
 <body>
     <!--navBar-->
@@ -31,7 +31,10 @@
             <div class="btn-wrap">
                 <button onclick="window.location.href= '/'" type="button"
                     class="btn btn-secondary btn-lg mr-3">목록으로</button>
-                {% if request.cookies.get('mytoken') %}
+                {% set currentToken = request.cookies.get('mytoken')%}   
+                {% set author = review['author']%} 
+                {% set currentUser = user['id']%}
+                {% if (author == currentUser) %}
                 <button onclick="window.location.href='/review_update/{{review['_id']}}' " type="button" class="btn btn-primary btn-lg" id="posting-btn">수정하기</button>
                 {% endif %}
             </div>

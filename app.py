@@ -73,10 +73,14 @@ def get_reviews_by_index():
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
     review = db.reviews.find_one({'_id': ObjectId(review_id)})
-    return render_template('review_detail.html', review=review)
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    user_info = db.user.find_one({"id": payload['id']})
+
+    return render_template('review_detail.html', review=review, user=user_info)
 
 
-@app.route('/review_update/<id_data>')
+@ app.route('/review_update/<id_data>')
 def review_update(id_data):
     author_info = db.reviews.find_one({"_id": ObjectId(id_data)})
     token_receive = request.cookies.get('mytoken')
@@ -128,7 +132,7 @@ def save_reviews():
     return jsonify({'msg': '등록 완료!'})
 
 
-@app.route('/api/reviews', methods=['PUT'])
+@ app.route('/api/reviews', methods=['PUT'])
 def update_reviews():
     title = request.form['title_give']
     content = request.form['content_give']
@@ -156,7 +160,7 @@ def update_reviews():
     return jsonify({'msg': '수정 완료!'})
 
 
-@app.route('/api/reviews', methods=['DELETE'])
+@ app.route('/api/reviews', methods=['DELETE'])
 def delete_reviews():
 
     file_id = request.args.get("id_give")
@@ -292,7 +296,7 @@ def api_login():
                            algorithm='HS256')  # .decode('utf-8')
 
         return jsonify({'result': 'success', 'token': token})
-        #session['user_id'] = id_receive
+        # session['user_id'] = id_receive
         # return jsonify({'result': 'success'})
 
     # 찾지 못하면
