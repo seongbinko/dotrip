@@ -1,9 +1,10 @@
 from datetime import datetime
-from bson.objectid import ObjectId
+from bson.objectid import ObjectId                                            
 import base64
 import datetime as dt
 import jwt
 import hashlib
+import json
 from pymongo import MongoClient
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 app = Flask(__name__)
@@ -37,12 +38,44 @@ def review_save():
 
 @app.route('/reviews', methods=['GET'])
 def show_reviews():
-    review = list(db.reviews.find({}))
-    return render_template('reviews.html', review_data=review)
+
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        review_data = list(db.reviews.find({}).sort("review_create_date", -1).limit(6))
+        reviews = []
+        
+        for review in review_data:
+            review['_id'] = str(review['_id'])
+            reviews.append(review)
+        return render_template('reviews.html', reviews=reviews , count=len(reviews))
+        #return jsonify({'reviews': reviews})
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+@app.route('/api/reviews', methods=['GET'])
+def get_reviews_by_index():
+
+    skipIndex = int(request.args.get("skipIndex"))
+    limit = int(request.args.get("limit"))
+    token_receive = request.cookies.get('mytoken')
+    
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        review_data = list(db.reviews.find({}).sort("review_create_date", -1).skip(skipIndex).limit(limit))
+        reviews = []
+        for review in review_data:
+            review['_id'] = str(review['_id'])
+            reviews.append(review)
+        return jsonify({'reviews': reviews})
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 # 게시글 상세 페이지로 이동하기
-
-
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
     review = db.reviews.find_one({'_id': ObjectId(review_id)})

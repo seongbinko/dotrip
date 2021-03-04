@@ -7,9 +7,9 @@
   <body>
     <!--navBar-->
     {% include 'header.html' %}
-    
-    <div class="card__wrap">
-    {% for i in review_data %}
+    <input id="review_count" type="hidden" value="{{ count }}"/>
+    <div id="reviews_list" class="card__wrap">
+    {% for i in reviews %}
       {%set author = i.author%}
       {%set title = i.review_title%}
       {%set date = i.review_create_date%}
