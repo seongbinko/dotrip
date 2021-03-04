@@ -20,13 +20,13 @@
     {%set id = i._id%}
     <div class="card" style="width: 350px">
       <img src="{{ url_for('static', filename='img/' + img_file) }}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">
+      <div class="card-header">
+        <h5>
           <a href="reviews/{{id}}">{{title}}</a>
         </h5>
-        <p class="card-text">{{content}}</p>
       </div>
       <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{content}}</p>
         <li class="list-group-item">작성일: {{date}}</li>
         <li class="list-group-item">작성자: {{author}}</li>
       </ul>

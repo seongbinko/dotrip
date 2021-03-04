@@ -95,7 +95,7 @@ def show_reviews():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         total_count = int(db.reviews.count())
-        review_data = list(db.reviews.find({}).sort("review_create_date", 1).limit(6))
+        review_data = list(db.reviews.find({}).sort("review_create_date", 1).limit(12))
         reviews = []
 
         for review in review_data:
