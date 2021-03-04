@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 # from datetime import datetime
 from bson.objectid import ObjectId
-=======
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
 import base64
 import datetime
 import jwt
@@ -51,20 +48,11 @@ def detail_reviews(review_id):
     review = list(db.reviews.find({'_id': review_id}))
     return render_template('detail.html', review=review)
 
-<<<<<<< HEAD
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
     author_info = db.reviews.find_one({"_id": ObjectId(id_data)})
 
     return render_template('review_update.html', data=author_info)
-=======
-
-@ app.route('/review_update/<_id>/<author>')
-def review_update(_id, author):
-    datas = list(db.reviews.find({}))
-    _id = datas[i]['_id']
-    return render_template('review_update.html', review_data=datas)
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
 
 
 @ app.route('/api/reviews', methods=['POST'])
@@ -135,11 +123,7 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
     # if 'user_id' in session:
-<<<<<<< HEAD
-        #user_info = db.user.find_one({"id": session['user_id']})
-=======
         # user_info = db.user.find_one({"id": session['user_id']})
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return render_template('reviews.html', id=user_info["id"])
     # else:
         # return redirect(url_for("login"))
@@ -200,11 +184,7 @@ def api_sign_up():
 
         # # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
-<<<<<<< HEAD
-        #session['user_id'] = id_receive
-=======
         # session['user_id'] = id_receive
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
@@ -238,11 +218,7 @@ def api_login():
                            algorithm='HS256')  # .decode('utf-8')
 
         return jsonify({'result': 'success', 'token': token})
-<<<<<<< HEAD
         #session['user_id'] = id_receive
-=======
-        # session['user_id'] = id_receive
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return jsonify({'result': 'success'})
 
     # 찾지 못하면
