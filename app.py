@@ -13,7 +13,6 @@ SECRET_KEY = 'DOTRIP'
 client = MongoClient('localhost', 27017)
 db = client.dbdotrip
 
-
 @ app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
