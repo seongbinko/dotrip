@@ -1,4 +1,4 @@
-let count = $("#review_count").val();
+const count = $("#review_count").val();
 const total_count = $("#total_count").val();
 let skipIndex = count;
 const limit = count;
@@ -34,7 +34,7 @@ function infinity(){
                                     </ul>
                                 </div>`
                 $("#reviews_list").append(appendInfo);
-                count++;
+                skipIndex++;
             })
   
           }
