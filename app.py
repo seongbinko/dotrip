@@ -1,7 +1,7 @@
-# from datetime import datetime
+from datetime import datetime 
 from bson.objectid import ObjectId
 import base64
-import datetime
+import datetime as dt
 import jwt
 import hashlib
 from pymongo import MongoClient
@@ -45,28 +45,17 @@ def show_reviews():
 
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
-    #img = list(db.reviews.find({'reivew_file': img}))
-    reviewId = list(db.reviews.find({'_id': review_id}))
-    return render_template('review_detail.html', reviewId=reviewId)
+    review = list(db.reviews.find({'_id': review_id}))
+    return render_template('detail.html', review=review)
 
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
-
-    # 가입아이디 정보와 로그인상태 아이디 정보가 일치하면 여기로 보내기 시간남으면 2중 검증구현을 위해
-    # user_info = db.user.find_one({"id": payload['id']})
-
     author_info = db.reviews.find_one({"_id": ObjectId(id_data)})
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        return render_template('review_update.html', data=author_info, id=payload['id'])
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+    return render_template('review_update.html', data=author_info)
 
 
-@app.route('/api/reviews', methods=['POST'])
+@ app.route('/api/reviews', methods=['POST'])
 def save_reviews():
     title = request.form['title_give']
     content = request.form['content_give']
@@ -94,51 +83,13 @@ def save_reviews():
         'review_file': f'{filename}.{extension}',
         'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
         'author': user_info['id']
+
         # 'author': user_id['id']
     }
 
     db.reviews.insert_one(doc)
 
     return jsonify({'msg': '등록 완료!'})
-
-
-@app.route('/api/reviews', methods=['PUT'])
-def update_reviews():
-    title = request.form['title_give']
-    content = request.form['content_give']
-    file = request.files["file_give"]
-    file_id = request.form['id_give']
-
-    extension = file.filename.split('.')[-1]
-
-    today = datetime.now()
-    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
-
-    filename = f'file-{mytime}.{extension}'
-
-    save_to = f'static/img/{filename}.{extension}'
-
-    file.save(save_to)
-
-    doc = {
-        'review_title': title,
-        'review_content': content,
-        'review_file': f'{filename}.{extension}',
-        'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
-    }
-
-    db.reviews.update_one({'_id': ObjectId(file_id)}, {'$set': doc})
-
-    return jsonify({'msg': '수정 완료!'})
-
-
-@app.route('/api/reviews', methods=['DELETE'])
-def delete_reviews():
-    file_id = request.args.get("id_give")
-
-    db.reviews.delete_one({'_id': ObjectId(file_id)})
-
-    return jsonify({'msg': '삭제 완료!'})
 
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
@@ -172,7 +123,7 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
     # if 'user_id' in session:
-        #user_info = db.user.find_one({"id": session['user_id']})
+        # user_info = db.user.find_one({"id": session['user_id']})
         # return render_template('reviews.html', id=user_info["id"])
     # else:
         # return redirect(url_for("login"))
@@ -226,14 +177,14 @@ def api_sign_up():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+            'exp': dt.datetime.utcnow() + dt.timedelta(minutes=5)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
         # .decode('utf-8') pwjwt 3이상 버전부터는 필요하지 않음 default가 utf-8
 
         # # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
-        #session['user_id'] = id_receive
+        # session['user_id'] = id_receive
         # return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
@@ -261,7 +212,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+            'exp': dt.datetime.utcnow() + dt.timedelta(minutes=5)
         }
         token = jwt.encode(payload, SECRET_KEY,
                            algorithm='HS256')  # .decode('utf-8')
