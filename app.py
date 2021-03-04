@@ -50,12 +50,6 @@ def detail_reviews(review_id):
     return render_template('detail.html', reviewId=reviewId)
 
 
-<< << << < HEAD
-
-== == == =
->>>>>> > 042be0189b8884bc84ace0a9ff63c9f578d6979b
-
-
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
     author_info = db.reviews.find_one({"_id": ObjectId(id_data)})
