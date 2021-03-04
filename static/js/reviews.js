@@ -1,7 +1,7 @@
-const count = $("#review_count").val();
-const total_count = $("#total_count").val();
-let skipIndex = count;
-const limit = count;
+const count = parseInt($("#review_count").val());
+const total_count = parseInt($("#total_count").val());
+let skipIndex = parseInt(count);
+const limit = parseInt(count);
 
 function infinity(){
   window.onscroll = function(e){
