@@ -29,7 +29,7 @@
                 <button onclick="window.location.href= '/'" type="button"
                     class="btn btn-secondary btn-lg mr-3">목록으로</button>
                 {% if request.cookies.get('mytoken') %}
-                <button onclick="window.location.href='/' " type="button" class="btn btn-primary btn-lg" id="posting-btn">수정하기</button>
+                <button onclick="window.location.href='/review_update/{{review['_id']}}' " type="button" class="btn btn-primary btn-lg" id="posting-btn">수정하기</button>
                 {% endif %}
             </div>
 
