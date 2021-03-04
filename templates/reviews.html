@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    {% include 'fragment.html' %}
-    <link rel="stylesheet" type="text/css" href="../static/css/reviews.css">
-  </head>
-  <body>
-    <!--navBar-->
-    {% include 'header.html' %}
-    <input id="review_count" type="hidden" value="{{ count }}"/>
-    <div id="reviews_list" class="card__wrap">
+  {% include 'fragment.html' %}
+  <link rel="stylesheet" type="text/css" href="../static/css/reviews.css">
+</head>
+<body>
+  <!--navBar-->
+  {% include 'header.html' %}
+  <input id="review_count" type="hidden" value="{{ count }}" />
+  <div id="reviews_list" class="card__wrap">
     {% for i in reviews %}
-      {%set author = i.author%}
-      {%set title = i.review_title%}
-      {%set date = i.review_date%}
-      {%set img_file = i.review_file%}
-      {%set content = i.review_content%}
-      {%set detail = i._id%}
-      <div class="card" style="width: 350px">
-        <img src="{{ url_for('static', filename='img/' + img_file) }}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">
-            <a href="reviews/{{detail}}">{{title}}</a>
-          </h5>
-          <p class="card-text">{{content}}</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">작성일: {{date}}</li>
-          <li class="list-group-item">작성자: {{author}}</li>
-        </ul>
+    {%set author = i.author%}
+    {%set title = i.review_title%}
+    {%set date = i.review_create_date%}
+    {%set img_file = i.review_file%}
+    {%set content = i.review_content%}
+    {%set id = i._id%}
+    <div class="card" style="width: 350px">
+      <img src="{{ url_for('static', filename='img/' + img_file) }}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">
+          <a href="reviews/{{id}}">{{title}}</a>
+        </h5>
+        <p class="card-text">{{content}}</p>
       </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">작성일: {{date}}</li>
+        <li class="list-group-item">작성자: {{author}}</li>
+      </ul>
+    </div>
     {% endfor %}
-    </div> 
-
-
-    
-    <!--무한 스크롤 구현 필요//js에서-->
-    <script src="../static/js/reveiws.js"></script>
-  </body>
+  </div>
+  <!--무한 스크롤 구현 필요//js에서-->
+  <script src="../static/js/reveiws.js"></script>
+</body>
 </html>

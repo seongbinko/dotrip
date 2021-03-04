@@ -32,7 +32,9 @@ function infinity(){
                                   </ul>
                               </div>`
               $("#reviews_list").append(appendInfo);
+              count++;
           })
+
         }
       })
     }

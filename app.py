@@ -26,9 +26,9 @@ def review_save():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         return render_template('review_save.html', id=payload['id'])
     except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+        return redirect(url_for("login", token_expired="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+        return redirect(url_for("login"))
     # return render_template('review_save.html')
 
 
@@ -41,7 +41,7 @@ def show_reviews():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        review_data = list(db.reviews.find({}).sort("review_create_date", -1).limit(6))
+        review_data = list(db.reviews.find({}).sort("review_create_date", 1).limit(6))
         reviews = []
         
         for review in review_data:
@@ -50,29 +50,21 @@ def show_reviews():
         return render_template('reviews.html', reviews=reviews , count=len(reviews))
         #return jsonify({'reviews': reviews})
     except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+        return redirect(url_for("login", token_expired="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+        return redirect(url_for("login"))
 
 @app.route('/api/reviews', methods=['GET'])
 def get_reviews_by_index():
 
     skipIndex = int(request.args.get("skipIndex"))
     limit = int(request.args.get("limit"))
-    token_receive = request.cookies.get('mytoken')
-    
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        review_data = list(db.reviews.find({}).sort("review_create_date", -1).skip(skipIndex).limit(limit))
-        reviews = []
-        for review in review_data:
-            review['_id'] = str(review['_id'])
-            reviews.append(review)
-        return jsonify({'reviews': reviews})
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+    review_data = list(db.reviews.find({}).sort("review_create_date", 1).skip(skipIndex).limit(limit))
+    reviews = []
+    for review in review_data:
+        review['_id'] = str(review['_id'])
+        reviews.append(review)
+    return jsonify({'reviews': reviews})
 
 # 게시글 상세 페이지로 이동하기
 @app.route('/reviews/<review_id>', methods=['GET'])
@@ -197,9 +189,9 @@ def home():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         return redirect("reviews")
     except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+        return redirect(url_for("login", token_expired="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+        return redirect(url_for("login"))
 
     # if 'user_id' in session:
         # user_info = db.user.find_one({"id": session['user_id']})
@@ -210,8 +202,8 @@ def home():
 
 @ app.route('/login')
 def login():
-    msg = request.args.get("msg")
-    return render_template('login.html', msg=msg)
+    token_expired = request.args.get("token_expired")
+    return render_template('login.html', token_expired=token_expired)
 
 
 @ app.route('/sign-up')
@@ -256,7 +248,7 @@ def api_sign_up():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': dt.datetime.utcnow() + dt.timedelta(minutes=5)
+            'exp': dt.datetime.utcnow() + dt.timedelta(seconds=5)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
         # .decode('utf-8') pwjwt 3이상 버전부터는 필요하지 않음 default가 utf-8
@@ -291,7 +283,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': dt.datetime.utcnow() + dt.timedelta(minutes=5)
+            'exp': dt.datetime.utcnow() + dt.timedelta(seconds=5)
         }
         token = jwt.encode(payload, SECRET_KEY,
                            algorithm='HS256')  # .decode('utf-8')
