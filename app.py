@@ -49,6 +49,7 @@ def detail_reviews(review_id):
     return render_template('review_detail.html', review=review)
 
 
+
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
     author_info = db.reviews.find_one({"_id": ObjectId(id_data)})
@@ -91,6 +92,45 @@ def save_reviews():
     db.reviews.insert_one(doc)
 
     return jsonify({'msg': '등록 완료!'})
+
+
+@app.route('/api/reviews', methods=['PUT'])
+def update_reviews():
+    title = request.form['title_give']
+    content = request.form['content_give']
+    file = request.files["file_give"]
+    file_id = request.form['id_give']
+
+    extension = file.filename.split('.')[-1]
+
+    today = datetime.now()
+    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+
+    filename = f'file-{mytime}.{extension}'
+
+    save_to = f'static/img/{filename}.{extension}'
+
+    file.save(save_to)
+
+    doc = {
+        'review_title': title,
+        'review_content': content,
+        'review_file': f'{filename}.{extension}',
+        'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
+    }
+
+    db.reviews.update_one({'_id': ObjectId(file_id)}, {'$set': doc})
+
+    return jsonify({'msg': '수정 완료!'})
+
+
+@app.route('/api/reviews', methods=['DELETE'])
+def delete_reviews():
+    file_id = request.args.get("id_give")
+
+    db.reviews.delete_one({'_id': ObjectId(file_id)})
+
+    return jsonify({'msg': '삭제 완료!'})
 
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
