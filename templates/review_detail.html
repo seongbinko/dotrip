@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
   {% include 'fragment.html' %}
+  <link rel="stylesheet" type="text/css" href="../static/css/review_detail.css">
 </head>
 <body>
     <!--navBar-->
@@ -10,15 +11,11 @@
 
         <!-- img-view -->
         <div class="img-container">
-            <div class="img-wrap">
-                <img src="{{ url_for('static', filename='img/' + review['review_file']) }}" alt="업로드 한 이미지" id="img-preview">
-            </div>
+            <img src="{{ url_for('static', filename='img/' + review['review_file']) }}" alt="업로드 한 이미지" id="img-preview">
         </div>
 
         <!-- posting-box -->
         <div class="posting-box">
-            <div class="custom-file form-group file-upload">
-            </div>
 
             <div class="form-group">
                 <div class="content">{{review['review_content']}}</div>
