@@ -79,7 +79,10 @@ def get_reviews_by_index():
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
     review = db.reviews.find_one({'_id': ObjectId(review_id)})
-    print(review)
+    #token_receive = request.cookies.get('mytoken')
+    #payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    #user_info = db.user.find_one({"id": payload['id']})
+
     return render_template('review_detail.html', review=review)
 
 
