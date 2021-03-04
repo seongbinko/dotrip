@@ -1,10 +1,14 @@
 const count = $("#review_count").val();
+const total_count = $("#total_count").val();
 let skipIndex = count;
 const limit = count;
 
 function infinity(){
   window.onscroll = function(e){
     if((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
+      if(total_count <= skipIndex) {
+        return false;
+      }
 
       $.ajax({
         type: "GET",

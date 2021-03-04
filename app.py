@@ -94,13 +94,14 @@ def show_reviews():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        total_count = int(db.reviews.count())
         review_data = list(db.reviews.find({}).sort("review_create_date", 1).limit(6))
         reviews = []
 
         for review in review_data:
             review['_id'] = str(review['_id'])
             reviews.append(review)
-        return render_template('reviews.html', reviews=reviews, count=len(reviews))
+        return render_template('reviews.html', reviews=reviews, count=len(reviews),total_count=total_count)
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", token_expired="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:

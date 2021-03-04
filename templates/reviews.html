@@ -9,6 +9,7 @@
   <!--navBar-->
   {% include 'header.html' %}
   <input id="review_count" type="hidden" value="{{ count }}" />
+  <input id="total_count" type="hidden" value="{{ total_count }}" />
   <div id="reviews_list" class="card__wrap">
     {% for i in reviews %}
     {%set author = i.author%}
