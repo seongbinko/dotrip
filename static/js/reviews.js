@@ -16,7 +16,6 @@ function infinity(){
         success: function (response) {
             const reviews = (response['reviews'])
             const file_url = "/static/img/";
-            console.log(reviews);
             $.each(reviews, function (index, review) {
               let appendInfo = `<div class="card" style="width: 350px">
                                   <img src="${file_url + review.review_file}" class="card-img-top" alt="...">

@@ -40,7 +40,6 @@ function update() {
     success: function (response) {
       alert(response['msg']);
       window.location.href = `/reviews/${idValue}`;
-      console.log(data);
     },
   });
 }
