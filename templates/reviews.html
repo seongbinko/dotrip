@@ -21,12 +21,12 @@
     <div class="card" style="width: 350px">
       <img src="{{ url_for('static', filename='img/' + img_file) }}" class="card-img-top" alt="...">
       <div class="card-header">
-        <h5>
+        <h5 class="text-center">
           <a href="reviews/{{id}}">{{title}}</a>
         </h5>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">{{content}}</p>
+        <li class="list-group-item">{{content}}</li>
         <li class="list-group-item">작성일: {{date}}</li>
         <li class="list-group-item">작성자: {{author}}</li>
       </ul>
