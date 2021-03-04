@@ -5,16 +5,23 @@ body {
 .card__wrap {
 	margin: auto;
 	margin-top: 80px;
-	width: 90%;
+	max-width: 1200px;
 	display: flex;
 	justify-content: center;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
 .card {
+	width: 350px;
 	margin: 10px;
 }
 
 .card-img-top {
 	height: 200px;
 }
+
+.card-body {
+	height: 200px;
+	overflow: hidden;
+}
+

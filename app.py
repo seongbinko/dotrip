@@ -133,7 +133,7 @@ def save_reviews():
         'review_title': title,
         'review_content': content,
         'review_file': f'{filename}.{extension}',
-        'review_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
+        'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
         'author': user_info['id']
 
     }
@@ -154,7 +154,7 @@ def update_reviews():
     doc = {
         'review_title': title,
         'review_content': content,
-        'review_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
+        'review_modified_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
     }
 
     if file is not None:
