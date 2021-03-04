@@ -7,18 +7,24 @@
     <!--navBar-->
     {% include 'header.html' %}
     <div class="content__wrap">
-        <h1 class="review_title">{{review['review_title']}}</h1>
 
         <!-- img-view -->
         <div class="img-container">
-            <img src="{{ url_for('static', filename='img/' + review['review_file']) }}" alt="업로드 한 이미지" id="img-preview">
+            <div class="img-wrap">
+                <img src="{{ url_for('static', filename='img/' + review['review_file']) }}" alt="업로드 한 이미지" id="img-preview">
         </div>
+    </div>
 
         <!-- posting-box -->
         <div class="posting-box">
-
+            <div class="form-group mt-2">
+                <label>제목</label>
+                <input type="email" class="form-control" id="title" placeholder="{{review['review_title']}}" readonly>
+            </div>
+            
             <div class="form-group">
-                <div class="content">{{review['review_content']}}</div>
+                <label>내용</label>
+                <textarea readonly class="form-control" id="content" rows="5" placeholder="{{review['review_content']}}"></textarea>
             </div>
 
             <!-- btn-group -->

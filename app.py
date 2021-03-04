@@ -1,5 +1,5 @@
 from datetime import datetime
-from bson.objectid import ObjectId                                            
+from bson.objectid import ObjectId
 import base64
 import datetime as dt
 import jwt
@@ -43,16 +43,17 @@ def show_reviews():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         review_data = list(db.reviews.find({}).sort("review_create_date", 1).limit(6))
         reviews = []
-        
+
         for review in review_data:
             review['_id'] = str(review['_id'])
             reviews.append(review)
-        return render_template('reviews.html', reviews=reviews , count=len(reviews))
-        #return jsonify({'reviews': reviews})
+        return render_template('reviews.html', reviews=reviews, count=len(reviews))
+        # return jsonify({'reviews': reviews})
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", token_expired="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login"))
+
 
 @app.route('/api/reviews', methods=['GET'])
 def get_reviews_by_index():
@@ -67,6 +68,8 @@ def get_reviews_by_index():
     return jsonify({'reviews': reviews})
 
 # 게시글 상세 페이지로 이동하기
+
+
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
     review = db.reviews.find_one({'_id': ObjectId(review_id)})
@@ -116,7 +119,7 @@ def save_reviews():
         'review_title': title,
         'review_content': content,
         'review_file': f'{filename}.{extension}',
-        'review_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
+        'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
         'author': user_info['id']
 
     }
@@ -137,7 +140,7 @@ def update_reviews():
     doc = {
         'review_title': title,
         'review_content': content,
-        'review_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
+        'review_modified_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
     }
 
     if file is not None:
