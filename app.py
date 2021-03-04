@@ -45,8 +45,9 @@ def show_reviews():
 
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
-    review = list(db.reviews.find({'_id': review_id}))
-    return render_template('detail.html', review=review)
+    #img = list(db.reviews.find({'reivew_file': img}))
+    reviewId = list(db.reviews.find({'_id': review_id}))
+    return render_template('detail.html', reviewId=reviewId)
 
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
