@@ -11,11 +11,11 @@
         <ul class="navbar-nav mr-auto">
             {% if request.cookies.get('mytoken') is none %}
             {% else %}
-                <li class="nav-item">
-                    <a class="nav-link btn btn-outline-primary" href="/review_save">
-                        <i class="fa fa-plus" aria-hidden="true"></i> 리뷰 작성
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-outline-primary" href="/review_save">
+                    <i class="fa fa-plus" aria-hidden="true"></i> 리뷰 작성
+                </a>
+            </li>
             {% endif %}
         </ul>
         <ul class="navbar-nav justify-content-end">
@@ -41,16 +41,21 @@
     </div>
     <script>
         // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
-        $(document).ready(function() {
+        $(document).ready(function () {
             let token = $.cookie('mytoken');
-            if(token !== undefined) {
+            if (token !== undefined) {
                 token = JSON.parse(atob(token.split('.')[1]));
                 $("#user_id").text(token.id + '님 환영합니다')
+
             }
         })
+
         function logout() {
-            $.removeCookie('mytoken');
-            window.location.href = '/';
+            $.removeCookie('mytoken', {
+                path: '/'
+            })
+
+            window.location.href = '/'
         }
     </script>
 </nav>
