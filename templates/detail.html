@@ -1,7 +1,43 @@
 <!DOCTYPE html>
 <head>
-
+  {% include 'fragment.html' %}
+  
 </head>
 <body>
-  <h1>Detail</h1>
+  <nav>
+    {% include 'header.html' %}
+  </nav>
+  <div class="content__wrap">
+    <h1 class="text-center">리뷰 작성하기</h1>
+
+    <!-- img-view -->
+    <div class="img-container">
+        <div class="img-wrap">
+            <img src="..." alt="업로드 한 이미지" id="img-preview">
+        </div>
+    </div>
+
+    <!-- posting-box -->
+    <div class="posting-box">
+        <div class="custom-file form-group file-upload">
+        </div>
+
+        <div class="form-group mt-2">
+            <div class="review_title">임시방편 제목이다.</div>
+        </div>
+
+        <div class="form-group">
+            <label>내용</label>
+            <div class="content">무슨말이든~~하라고~~</div>
+        </div>
+
+        <!-- btn-group -->
+        <div class="btn-wrap">
+            <button onclick="window.location.href= '/'" type="button"
+                class="btn btn-secondary btn-lg mr-3">목록으로</button>
+            <button onclick="posting()" type="button" class="btn btn-primary btn-lg" id="posting-btn">등록</button>
+        </div>
+
+    </div>
+</div>
 </body>

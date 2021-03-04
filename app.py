@@ -45,13 +45,18 @@ def show_reviews():
 
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
-    review = list(db.reviews.find({'_id': review_id}))
-    return render_template('detail.html', review=review)
+    #img = list(db.reviews.find({'reivew_file': img}))
+    reviewId = list(db.reviews.find({'_id': review_id}))
+    return render_template('detail.html', reviewId=reviewId)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 042be0189b8884bc84ace0a9ff63c9f578d6979b
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
 
+<<<<<<< HEAD
     # 가입아이디 정보와 로그인상태 아이디 정보가 일치하면 여기로 보내기 시간남으면 2중 검증구현을 위해
     # user_info = db.user.find_one({"id": payload['id']})
 
@@ -64,6 +69,9 @@ def review_update(id_data):
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+=======
+    return render_template('review_update.html', data=author_info)
+>>>>>>> 042be0189b8884bc84ace0a9ff63c9f578d6979b
 
 
 @app.route('/api/reviews', methods=['POST'])
@@ -172,7 +180,11 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
     # if 'user_id' in session:
+<<<<<<< HEAD
         #user_info = db.user.find_one({"id": session['user_id']})
+=======
+        # user_info = db.user.find_one({"id": session['user_id']})
+>>>>>>> 042be0189b8884bc84ace0a9ff63c9f578d6979b
         # return render_template('reviews.html', id=user_info["id"])
     # else:
         # return redirect(url_for("login"))
@@ -233,7 +245,11 @@ def api_sign_up():
 
         # # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
+<<<<<<< HEAD
         #session['user_id'] = id_receive
+=======
+        # session['user_id'] = id_receive
+>>>>>>> 042be0189b8884bc84ace0a9ff63c9f578d6979b
         # return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
