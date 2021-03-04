@@ -1,4 +1,4 @@
-from datetime import datetime 
+from datetime import datetime
 from bson.objectid import ObjectId
 import base64
 import datetime as dt
@@ -46,7 +46,8 @@ def show_reviews():
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
     review = list(db.reviews.find({'_id': review_id}))
-    return render_template('detail.html', review=review)
+    return render_template('review_detail.html', review=review)
+
 
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
