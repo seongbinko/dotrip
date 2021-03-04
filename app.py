@@ -40,14 +40,14 @@ def show_reviews():
     review = list(db.reviews.find({}))
     return render_template('reviews.html', review_data=review)
 
-# 게시글 페이지로 이동하기
+# 게시글 상세 페이지로 이동하기
 
 
 @app.route('/reviews/<review_id>', methods=['GET'])
 def detail_reviews(review_id):
-    review = list(db.reviews.find({'_id': review_id}))
+    review = db.reviews.find_one({'_id': ObjectId(review_id)})
+    print(review)
     return render_template('review_detail.html', review=review)
-
 
 
 @app.route('/review_update/<id_data>')
