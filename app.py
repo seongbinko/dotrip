@@ -49,10 +49,6 @@ def detail_reviews(review_id):
     reviewId = list(db.reviews.find({'_id': review_id}))
     return render_template('review_detail.html', reviewId=reviewId)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8d5d4ef7f9770772bd387d1d143c7c12c0458481
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
 
