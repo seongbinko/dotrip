@@ -97,26 +97,24 @@ def save_reviews():
 def update_reviews():
     title = request.form['title_give']
     content = request.form['content_give']
-    file = request.files["file_give"]
     file_id = request.form['id_give']
-
-    extension = file.filename.split('.')[-1]
+    file = request.files.get("file_give")
 
     today = datetime.now()
-    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
-
-    filename = f'file-{mytime}.{extension}'
-
-    save_to = f'static/img/{filename}.{extension}'
-
-    file.save(save_to)
 
     doc = {
         'review_title': title,
         'review_content': content,
-        'review_file': f'{filename}.{extension}',
         'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
     }
+
+    if file is not None:
+        extension = file.filename.split('.')[-1]
+        mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+        filename = f'file-{mytime}'
+        save_to = f'static/img/{filename}.{extension}'
+        file.save(save_to)
+        doc['review_file'] = f'{filename}.{extension}'
 
     db.reviews.update_one({'_id': ObjectId(file_id)}, {'$set': doc})
 

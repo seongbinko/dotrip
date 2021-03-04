@@ -41,7 +41,8 @@
         <!-- posting-box -->
         <div class="posting-box">
             <div class="custom-file form-group file-upload">
-                <input type="file" class="custom-file-input" id="file" onchange="preview(this)">
+                <input type="file" class="custom-file-input" id="file" onchange="preview(this)"
+                    value="{{ url_for('static', filename='img/' + data['review_file']) }}">
                 <label class="custom-file-label" id="file_text" for="file">{{data['review_file']}}</label>
             </div>
 
@@ -64,7 +65,7 @@
                 <button onclick="window.location.href= '/'" type="button"
                     class="btn btn-secondary btn-lg mr-3">취소</button>
                 <!-- 삭제시 디비까지 삭제 -->
-                <button onclick="deleteReview()" type="button" class="btn btn-secondary btn-lg mr-3">삭제</button>
+                <button onclick="deleteReview()" type="button" class="btn btn-danger btn-lg mr-3">삭제</button>
                 <!-- 수정은 디비에 덮어씌움 -->
                 <button onclick="posting()" type="button" class="btn btn-primary btn-lg" id="posting-btn">수정</button>
             </div>

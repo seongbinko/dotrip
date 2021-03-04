@@ -19,12 +19,18 @@ function posting() {
   }
 
   let form_data = new FormData();
+  if (file === undefined) {
+    form_data.append('title_give', title);
+    form_data.append('content_give', content);
+    form_data.append('id_give', idValue);
+  } else {
+    form_data.append('file_give', file);
+    form_data.append('title_give', title);
+    form_data.append('content_give', content);
+    form_data.append('id_give', idValue);
+  }
 
-  form_data.append('file_give', file);
-  form_data.append('title_give', title);
-  form_data.append('content_give', content);
-  form_data.append('id_give', idValue);
-
+  console.log(form_data);
   $.ajax({
     type: 'PUT',
     url: '/api/reviews',
@@ -35,6 +41,7 @@ function posting() {
     success: function (response) {
       alert(response['msg']);
       window.location.href = '/reviews';
+      console.log(data);
     },
   });
 }
