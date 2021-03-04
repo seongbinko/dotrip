@@ -2,7 +2,7 @@ $(document).ready(function () {
   bsCustomFileInput.init();
 });
 
-function posting() {
+function update() {
   let title = $('#title').val();
   let content = $('#content').val();
   let file = $('#file')[0].files[0];
@@ -30,7 +30,6 @@ function posting() {
     form_data.append('id_give', idValue);
   }
 
-  console.log(form_data);
   $.ajax({
     type: 'PUT',
     url: '/api/reviews',
@@ -40,7 +39,7 @@ function posting() {
     processData: false,
     success: function (response) {
       alert(response['msg']);
-      window.location.href = '/reviews';
+      window.location.href = `/reviews/${idValue}`;
       console.log(data);
     },
   });
@@ -81,4 +80,9 @@ function deleteReview() {
       window.location.href = '/reviews';
     },
   });
+}
+
+function cancelBtn() {
+  let idValue = window.location.pathname.split('/')[2];
+  window.location.href = `/reviews/${idValue}`;
 }
