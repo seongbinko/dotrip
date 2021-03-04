@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 # from datetime import datetime
 from bson.objectid import ObjectId
-=======
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
 import base64
 import datetime
 import jwt
@@ -51,23 +48,25 @@ def detail_reviews(review_id):
     review = list(db.reviews.find({'_id': review_id}))
     return render_template('detail.html', review=review)
 
-<<<<<<< HEAD
+
 @app.route('/review_update/<id_data>')
 def review_update(id_data):
+
+    # 가입아이디 정보와 로그인상태 아이디 정보가 일치하면 여기로 보내기 시간남으면 2중 검증구현을 위해
+    # user_info = db.user.find_one({"id": payload['id']})
+
     author_info = db.reviews.find_one({"_id": ObjectId(id_data)})
-
-    return render_template('review_update.html', data=author_info)
-=======
-
-@ app.route('/review_update/<_id>/<author>')
-def review_update(_id, author):
-    datas = list(db.reviews.find({}))
-    _id = datas[i]['_id']
-    return render_template('review_update.html', review_data=datas)
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('review_update.html', data=author_info, id=payload['id'])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-@ app.route('/api/reviews', methods=['POST'])
+@app.route('/api/reviews', methods=['POST'])
 def save_reviews():
     title = request.form['title_give']
     content = request.form['content_give']
@@ -95,13 +94,51 @@ def save_reviews():
         'review_file': f'{filename}.{extension}',
         'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
         'author': user_info['id']
-
         # 'author': user_id['id']
     }
 
     db.reviews.insert_one(doc)
 
     return jsonify({'msg': '등록 완료!'})
+
+
+@app.route('/api/reviews', methods=['PUT'])
+def update_reviews():
+    title = request.form['title_give']
+    content = request.form['content_give']
+    file = request.files["file_give"]
+    file_id = request.form['id_give']
+
+    extension = file.filename.split('.')[-1]
+
+    today = datetime.now()
+    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+
+    filename = f'file-{mytime}.{extension}'
+
+    save_to = f'static/img/{filename}.{extension}'
+
+    file.save(save_to)
+
+    doc = {
+        'review_title': title,
+        'review_content': content,
+        'review_file': f'{filename}.{extension}',
+        'review_create_date': today.strftime('%Y.%m.%d.%H.%M.%S'),
+    }
+
+    db.reviews.update_one({'_id': ObjectId(file_id)}, {'$set': doc})
+
+    return jsonify({'msg': '수정 완료!'})
+
+
+@app.route('/api/reviews', methods=['DELETE'])
+def delete_reviews():
+    file_id = request.args.get("id_give")
+
+    db.reviews.delete_one({'_id': ObjectId(file_id)})
+
+    return jsonify({'msg': '삭제 완료!'})
 
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
@@ -135,11 +172,7 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
     # if 'user_id' in session:
-<<<<<<< HEAD
         #user_info = db.user.find_one({"id": session['user_id']})
-=======
-        # user_info = db.user.find_one({"id": session['user_id']})
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return render_template('reviews.html', id=user_info["id"])
     # else:
         # return redirect(url_for("login"))
@@ -200,11 +233,7 @@ def api_sign_up():
 
         # # token을 줍니다.
         return jsonify({'result': 'success', 'token': token})
-<<<<<<< HEAD
         #session['user_id'] = id_receive
-=======
-        # session['user_id'] = id_receive
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return jsonify({'result': 'success'})
     # 찾지 못하면
     else:
@@ -238,11 +267,7 @@ def api_login():
                            algorithm='HS256')  # .decode('utf-8')
 
         return jsonify({'result': 'success', 'token': token})
-<<<<<<< HEAD
         #session['user_id'] = id_receive
-=======
-        # session['user_id'] = id_receive
->>>>>>> 30845f0bc87a99ebdc171230f09ef0be6bc167f7
         # return jsonify({'result': 'success'})
 
     # 찾지 못하면
