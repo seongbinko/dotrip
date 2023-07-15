@@ -62,6 +62,9 @@ def api_sign_up():
     pw_receive = request.form['pw_give']
     pwConfirm_receive = request.form['pwConfirm_give']
 
+    if id_receive != "sb0331" and id_receive != 'sy0203':
+        return jsonify({'result': 'fail', 'msg': '가입 할 수 없는 아이디입니다.'})
+
     check_duplicate_user = db.user.find_one({'id': id_receive})
 
     if check_duplicate_user is not None:
@@ -93,7 +96,7 @@ def show_reviews():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        total_count = int(db.reviews.count())
+        total_count = int(db.reviews.count_documents({}))
         review_data = list(db.reviews.find({}).sort("review_create_date", 1).limit(12))
         reviews = []
 
@@ -235,4 +238,4 @@ def delete_reviews():
     return jsonify({'msg': '삭제 완료!'})
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=8081, debug=True)
