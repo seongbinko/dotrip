@@ -29,7 +29,7 @@ function infinity(){
                                       </div>
                                       <ul class="list-group list-group-flush">
                                         <li class="list-group-item">${review.review_content}</li>
-                                        <li class="list-group-item">${review.review_create_date}</li>
+<!--                                        <li class="list-group-item">${review.review_create_date}</li> -->
                                         <li class="list-group-item">${review.author}</li>
                                     </ul>
                                 </div>`

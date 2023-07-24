@@ -97,7 +97,7 @@ def show_reviews():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         total_count = int(db.reviews.count_documents({}))
-        review_data = list(db.reviews.find({}).sort("review_create_date", 1).limit(12))
+        review_data = list(db.reviews.find({}).sort("review_create_date", 1).limit(total_count))
         reviews = []
 
         for review in review_data:
@@ -238,4 +238,4 @@ def delete_reviews():
     return jsonify({'msg': '삭제 완료!'})
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=8081, debug=True)
+    app.run('0.0.0.0', port=4150, debug=True)

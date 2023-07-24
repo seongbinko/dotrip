@@ -18,6 +18,13 @@ $(document).ready(function () {
         $("#user_id").text(token.id + '님 환영합니다')
 
     }
+
+    let now = new Date();
+    let start = new Date('2023-04-15');
+
+    let timeDiff = now.getTime() - start.getTime();
+    let day = Math.floor(timeDiff / (1000 * 60 * 60 * 24) + 2);
+    $('#love-day').text('  +' + day);
 })
 
 function logout() {
